@@ -1,57 +1,56 @@
-import { createContext, useEffect, useState } from 'react'
-import { fallbackCategories, sheetSourceUrl } from '../data/appData'
-import { fetchRestaurantSheet } from '../utils/restaurantData'
+import { createContext } from 'react'
+import { fallbackCategories } from '../data/appData'
+import useRestaurants from '../hooks/useRestaurants'
 
 export const AppDataContext = createContext(null)
 
-function AppDataProvider({ children }) {
-  const [state, setState] = useState({
-    restaurants: [],
-    rawRows: [],
-    categories: fallbackCategories,
-    featuredRestaurant: {
-      title: 'Loading restaurants',
-      details: ['Fetching published sheet data...'],
-    },
-    loading: true,
-    error: null,
-  })
+function buildCategories(restaurants) {
+  const dynamicCategories = Array.from(
+    new Set(
+      restaurants
+        .map((restaurant) => restaurant.cuisine)
+        .filter(Boolean),
+    ),
+  )
 
-  useEffect(() => {
-    const controller = new AbortController()
+  if (dynamicCategories.length === 0) {
+    return fallbackCategories
+  }
 
-    async function loadRestaurantData() {
-      try {
-        setState((currentState) => ({
-          ...currentState,
-          loading: true,
-          error: null,
-        }))
+  return ['All', ...dynamicCategories.slice(0, 3)]
+}
 
-        const result = await fetchRestaurantSheet(sheetSourceUrl, controller.signal)
+function buildFeaturedRestaurant(restaurants) {
+  const featured = restaurants[0]
 
-        setState({
-          ...result,
-          loading: false,
-          error: null,
-        })
-      } catch (error) {
-        if (controller.signal.aborted) {
-          return
-        }
-
-        setState((currentState) => ({
-          ...currentState,
-          loading: false,
-          error: error instanceof Error ? error.message : 'Unable to load restaurant data.',
-        }))
-      }
+  if (!featured) {
+    return {
+      title: 'No restaurant selected',
+      details: ['Waiting for sheet data'],
     }
+  }
 
-    loadRestaurantData()
+  return {
+    title: featured.name,
+    details: [featured.hours, featured.phone, featured.address].filter(Boolean),
+  }
+}
 
-    return () => controller.abort()
-  }, [])
+function AppDataProvider({ children }) {
+  const { restaurants, loading, error } = useRestaurants()
+
+  const state = {
+    restaurants,
+    loading,
+    error,
+    categories: buildCategories(restaurants),
+    featuredRestaurant: loading && restaurants.length === 0
+      ? {
+          title: 'Loading restaurants',
+          details: ['Fetching published sheet data...'],
+        }
+      : buildFeaturedRestaurant(restaurants),
+  }
 
   return <AppDataContext.Provider value={state}>{children}</AppDataContext.Provider>
 }
