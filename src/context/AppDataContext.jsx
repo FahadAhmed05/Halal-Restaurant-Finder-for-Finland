@@ -1,8 +1,8 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 import { fallbackCategories, sheetSourceUrl } from '../data/appData'
 import { fetchRestaurantSheet } from '../utils/restaurantData'
 
-const AppDataContext = createContext(null)
+export const AppDataContext = createContext(null)
 
 function AppDataProvider({ children }) {
   const [state, setState] = useState({
@@ -56,14 +56,4 @@ function AppDataProvider({ children }) {
   return <AppDataContext.Provider value={state}>{children}</AppDataContext.Provider>
 }
 
-function useAppData() {
-  const context = useContext(AppDataContext)
-
-  if (!context) {
-    throw new Error('useAppData must be used within an AppDataProvider.')
-  }
-
-  return context
-}
-
-export { AppDataProvider, useAppData }
+export { AppDataProvider }

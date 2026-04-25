@@ -4,7 +4,7 @@ import Sidebar from './components/Sidebar'
 import TagChip from './components/TagChip'
 import { menuData } from './data/appData'
 import { Icon, MapPinIcon } from './components/icons'
-import { useAppData } from './context/AppDataContext'
+import useAppData from './hooks/useAppData'
 
 function App() {
   const { categories, featuredRestaurant, loading, error, restaurants } = useAppData()
