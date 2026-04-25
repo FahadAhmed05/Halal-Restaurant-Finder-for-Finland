@@ -1,0 +1,439 @@
+@import "tailwindcss";
+
+@theme {
+  --color-shell: #f5f4ee;
+  --color-page: #edf3ee;
+  --color-sidebar: #e8f3ed;
+  --color-content: #f7f5ee;
+  --color-map: #d5d7ce;
+  --color-forest: #16532f;
+  --color-forest-soft: #d7ecde;
+  --color-forest-muted: #6f7d74;
+  --color-card: #fdfcf8;
+  --font-sans: "Manrope", "Segoe UI", sans-serif;
+}
+
+:root {
+  color: #102719;
+  background:
+    radial-gradient(circle at top left, rgba(213, 236, 220, 0.9), transparent 24%),
+    linear-gradient(180deg, #edf3ee 0%, #e4ece5 100%);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  --page-bg: #e8f0ea;
+  --shell-bg: #f4f3eb;
+  --content-bg: #f6f4ed;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  font-family: var(--font-sans);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+@layer components {
+  .app-shell {
+    grid-template-columns: 240px minmax(0, 1.05fr) minmax(340px, 0.92fr);
+  }
+
+  .sidebar-panel {
+    @apply flex min-h-full flex-col justify-between bg-[var(--color-sidebar)];
+  }
+
+  .nav-item {
+    @apply flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold transition-all duration-200;
+  }
+
+  .nav-item-active {
+    @apply bg-[#cef0d6] text-emerald-950 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)];
+  }
+
+  .nav-item-idle {
+    @apply text-emerald-950/66 hover:bg-white/45;
+  }
+
+  .primary-sidebar-button {
+    @apply flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-950 px-4 py-3 text-sm font-semibold text-white shadow-[0_18px_36px_rgba(20,66,40,0.2)] transition hover:-translate-y-0.5 hover:bg-emerald-900;
+  }
+
+  .search-shell {
+    @apply flex h-11 min-w-[220px] items-center gap-2 rounded-full border border-emerald-950/8 bg-white/75 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)];
+  }
+
+  .near-button {
+    @apply inline-flex h-11 items-center gap-2 rounded-full bg-emerald-950 px-4 text-sm font-semibold text-white shadow-[0_16px_28px_rgba(20,66,40,0.18)];
+  }
+
+  .profile-button {
+    @apply inline-flex h-11 w-11 items-center justify-center rounded-full border border-emerald-950/10 bg-white/75 text-emerald-950 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)];
+  }
+
+  .filter-chip {
+    @apply rounded-full px-4 py-2 text-sm font-semibold transition;
+  }
+
+  .filter-chip-active {
+    @apply bg-emerald-950 text-white shadow-[0_10px_22px_rgba(20,66,40,0.18)];
+  }
+
+  .filter-chip-idle {
+    @apply border border-emerald-950/8 bg-white/70 text-emerald-950/70 hover:bg-white;
+  }
+
+  .restaurant-feed {
+    @apply space-y-5 overflow-auto pr-2;
+    height: calc(100vh - 12.5rem);
+  }
+
+  .restaurant-card {
+    @apply overflow-hidden rounded-[24px] border border-black/6 bg-[var(--color-card)] shadow-[0_16px_48px_rgba(40,63,48,0.08)];
+  }
+
+  .image-shell {
+    @apply relative isolate h-[200px] overflow-hidden;
+  }
+
+  .verified-pill {
+    @apply absolute right-4 top-4 z-20 inline-flex items-center gap-2 rounded-full bg-emerald-950 px-3 py-1 text-[0.58rem] font-bold uppercase tracking-[0.16em] text-white;
+  }
+
+  .verified-dot {
+    @apply h-1.5 w-1.5 rounded-full bg-emerald-200;
+  }
+
+  .rating-badge {
+    @apply inline-flex items-center gap-1 rounded-xl bg-[#cdeccf] px-2.5 py-1 text-xs font-bold text-emerald-950;
+  }
+
+  .tag-chip {
+    @apply rounded-lg bg-[#edf2ea] px-2.5 py-1 text-[0.62rem] font-bold uppercase tracking-[0.06em] text-slate-500;
+  }
+
+  .map-panel {
+    @apply relative min-h-full bg-[var(--color-map)];
+  }
+
+  .map-illustration {
+    @apply relative h-full overflow-hidden;
+    background:
+      radial-gradient(circle at top center, rgba(255,255,255,0.32), transparent 28%),
+      linear-gradient(180deg, #d9dbd3 0%, #cfd2c8 100%);
+  }
+
+  .map-grid,
+  .map-lines {
+    @apply absolute inset-0 opacity-60;
+  }
+
+  .map-grid {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+    background-size: 90px 90px;
+    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.92), rgba(0, 0, 0, 0.45));
+  }
+
+  .map-lines {
+    background-repeat: no-repeat;
+    filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.22));
+  }
+
+  .map-lines-a {
+    background-image:
+      radial-gradient(circle at 85% 10%, transparent 0 42px, rgba(255,255,255,0.6) 43px 44px, transparent 45px),
+      radial-gradient(circle at 74% 28%, transparent 0 64px, rgba(255,255,255,0.45) 65px 66px, transparent 67px),
+      radial-gradient(circle at 35% 88%, transparent 0 82px, rgba(255,255,255,0.42) 83px 84px, transparent 85px),
+      linear-gradient(110deg, transparent 0 22%, rgba(255,255,255,0.55) 22.5% 23%, transparent 23.4% 100%),
+      linear-gradient(160deg, transparent 0 59%, rgba(255,255,255,0.45) 59.2% 59.8%, transparent 60% 100%);
+  }
+
+  .map-lines-b {
+    background-image:
+      linear-gradient(40deg, transparent 0 12%, rgba(255,255,255,0.55) 12.2% 12.7%, transparent 13% 100%),
+      linear-gradient(120deg, transparent 0 68%, rgba(255,255,255,0.52) 68.2% 68.8%, transparent 69% 100%),
+      linear-gradient(88deg, transparent 0 44%, rgba(255,255,255,0.4) 44.2% 44.6%, transparent 45% 100%);
+    opacity: 0.48;
+  }
+
+  .map-lines-c {
+    background-image:
+      radial-gradient(circle at 92% 72%, transparent 0 110px, rgba(255,255,255,0.34) 111px 112px, transparent 113px),
+      radial-gradient(circle at 12% 40%, transparent 0 86px, rgba(255,255,255,0.32) 87px 88px, transparent 89px),
+      radial-gradient(circle at 54% 54%, transparent 0 160px, rgba(255,255,255,0.22) 161px 162px, transparent 163px);
+    opacity: 0.52;
+  }
+
+  .map-card {
+    @apply absolute left-6 top-6 z-20 w-[calc(100%-3rem)] max-w-[340px] rounded-[28px] bg-[rgba(249,247,242,0.92)] p-6 shadow-[0_22px_60px_rgba(35,51,39,0.14)] backdrop-blur;
+  }
+
+  .map-card-bullet {
+    @apply h-2.5 w-2.5 rounded-full bg-emerald-900;
+  }
+
+  .direction-button {
+    @apply mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-emerald-950 px-4 text-sm font-semibold text-white shadow-[0_18px_32px_rgba(20,66,40,0.18)];
+  }
+
+  .map-pin {
+    @apply absolute z-20 flex h-11 w-11 items-center justify-center rounded-full border border-emerald-950/12 bg-[rgba(249,247,242,0.96)] text-emerald-950 shadow-[0_14px_32px_rgba(50,64,52,0.16)];
+  }
+
+  .map-pin-top {
+    right: 54px;
+    top: 44%;
+  }
+
+  .map-pin-left {
+    left: 72px;
+    top: 62%;
+  }
+
+  .map-pin-bottom {
+    left: 45%;
+    bottom: 76px;
+  }
+
+  .zoom-controls {
+    @apply absolute bottom-16 right-6 z-20 flex w-14 flex-col overflow-hidden rounded-2xl border border-black/5 bg-white/90 shadow-[0_20px_42px_rgba(50,64,52,0.14)];
+  }
+
+  .zoom-controls button {
+    @apply h-14 text-2xl font-light text-emerald-950 transition hover:bg-emerald-50;
+  }
+
+  .target-control {
+    @apply absolute bottom-6 right-6 z-20 flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-950 text-white shadow-[0_18px_32px_rgba(20,66,40,0.22)];
+  }
+
+  .plate-art {
+    @apply absolute inset-0;
+  }
+
+  .mix-grill .board {
+    position: absolute;
+    inset: auto 36px 26px 34px;
+    height: 98px;
+    border-radius: 26px;
+    background: linear-gradient(180deg, #26160f 0%, #382117 40%, #19110c 100%);
+    box-shadow: 0 18px 26px rgba(0, 0, 0, 0.28);
+  }
+
+  .mix-grill .skewer {
+    position: absolute;
+    width: 188px;
+    height: 22px;
+    border-radius: 999px;
+    background:
+      radial-gradient(circle at 12% 50%, #803917 0 9px, transparent 10px),
+      radial-gradient(circle at 28% 50%, #c8662a 0 9px, transparent 10px),
+      radial-gradient(circle at 44% 50%, #5e3115 0 9px, transparent 10px),
+      radial-gradient(circle at 60% 50%, #8a4218 0 9px, transparent 10px),
+      radial-gradient(circle at 76% 50%, #d0712a 0 9px, transparent 10px),
+      radial-gradient(circle at 92% 50%, #5e3115 0 9px, transparent 10px),
+      linear-gradient(90deg, #d8b07b, #a07d52);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.24);
+  }
+
+  .mix-grill .skewer-1 {
+    left: 48px;
+    bottom: 72px;
+    transform: rotate(-10deg);
+  }
+
+  .mix-grill .skewer-2 {
+    left: 78px;
+    bottom: 45px;
+    transform: rotate(4deg);
+  }
+
+  .mix-grill .bowl {
+    position: absolute;
+    border-radius: 999px;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.26);
+  }
+
+  .mix-grill .bowl-1 {
+    left: 38px;
+    top: 22px;
+    width: 58px;
+    height: 32px;
+    background:
+      radial-gradient(circle at 50% 45%, #e4d6b8 0 22px, transparent 23px),
+      linear-gradient(180deg, #f9faf7, #cfcdc7);
+  }
+
+  .mix-grill .bowl-2 {
+    left: 104px;
+    top: 18px;
+    width: 70px;
+    height: 36px;
+    background:
+      radial-gradient(circle at 50% 48%, #743016 0 23px, transparent 24px),
+      linear-gradient(180deg, #f9faf7, #cfcdc7);
+  }
+
+  .rice-bowl .plate,
+  .curry-platter .plate {
+    position: absolute;
+    left: 50%;
+    bottom: 24px;
+    transform: translateX(-50%);
+    border-radius: 999px;
+    box-shadow: 0 18px 28px rgba(0, 0, 0, 0.24);
+  }
+
+  .rice-bowl .plate {
+    width: 238px;
+    height: 72px;
+    background:
+      radial-gradient(circle at center, #87c4e4 0 46px, #2d6c8e 47px 59px, #a5d2ee 60px 100%);
+  }
+
+  .rice-bowl .rice {
+    position: absolute;
+    left: 50%;
+    bottom: 48px;
+    width: 170px;
+    height: 44px;
+    transform: translateX(-50%);
+    border-radius: 999px;
+    background:
+      radial-gradient(circle at 20% 55%, #f4c74f 0 18px, transparent 19px),
+      radial-gradient(circle at 38% 48%, #f5cf62 0 18px, transparent 19px),
+      radial-gradient(circle at 58% 54%, #efbd37 0 18px, transparent 19px),
+      radial-gradient(circle at 76% 52%, #e8ae28 0 18px, transparent 19px);
+  }
+
+  .rice-bowl .stew {
+    position: absolute;
+    left: 50%;
+    bottom: 58px;
+    width: 104px;
+    height: 48px;
+    transform: translateX(-50%);
+    border-radius: 40px;
+    background:
+      radial-gradient(circle at 20% 60%, #5a2914 0 13px, transparent 14px),
+      radial-gradient(circle at 42% 38%, #7c3d1b 0 16px, transparent 17px),
+      radial-gradient(circle at 60% 65%, #8f4a20 0 15px, transparent 16px),
+      radial-gradient(circle at 82% 44%, #663116 0 14px, transparent 15px);
+  }
+
+  .curry-platter .plate {
+    width: 248px;
+    height: 74px;
+    background:
+      radial-gradient(circle at center, #efd0a6 0 44px, #a55a2d 45px 59px, #f2d8bb 60px 100%);
+  }
+
+  .curry-platter .naan {
+    position: absolute;
+    left: 84px;
+    bottom: 58px;
+    width: 70px;
+    height: 42px;
+    border-radius: 45px 35px 45px 35px;
+    transform: rotate(-14deg);
+    background: linear-gradient(180deg, #f2cf8e, #d59d48);
+    box-shadow: inset 0 -8px 0 rgba(129, 76, 28, 0.18);
+  }
+
+  .curry-platter .curry {
+    position: absolute;
+    right: 82px;
+    bottom: 58px;
+    width: 110px;
+    height: 50px;
+    border-radius: 999px;
+    background:
+      radial-gradient(circle at 28% 60%, #b14c1f 0 18px, transparent 19px),
+      radial-gradient(circle at 48% 42%, #cb6429 0 18px, transparent 19px),
+      radial-gradient(circle at 72% 56%, #903f18 0 18px, transparent 19px);
+  }
+
+  .curry-platter .garnish {
+    position: absolute;
+    right: 114px;
+    bottom: 86px;
+    width: 42px;
+    height: 18px;
+    border-radius: 999px;
+    background:
+      radial-gradient(circle at 20% 50%, #5aaa50 0 6px, transparent 7px),
+      radial-gradient(circle at 42% 40%, #82cf70 0 6px, transparent 7px),
+      radial-gradient(circle at 64% 60%, #45983c 0 6px, transparent 7px),
+      radial-gradient(circle at 84% 45%, #70c05a 0 6px, transparent 7px);
+  }
+}
+
+@media (max-width: 1180px) {
+  .app-shell {
+    grid-template-columns: 210px minmax(0, 1fr);
+  }
+
+  .map-panel {
+    grid-column: 1 / -1;
+    min-height: 540px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  .restaurant-feed {
+    height: auto;
+    max-height: none;
+    padding-bottom: 4px;
+  }
+}
+
+@media (max-width: 880px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar-panel {
+    min-height: auto;
+  }
+
+  .search-shell {
+    min-width: 0;
+    flex: 1;
+  }
+}
+
+@media (max-width: 640px) {
+  .map-card {
+    left: 16px;
+    right: 16px;
+    width: auto;
+    max-width: none;
+    padding: 20px;
+  }
+
+  .map-pin-top {
+    right: 22px;
+    top: 48%;
+  }
+
+  .map-pin-left {
+    left: 22px;
+  }
+}

@@ -1,0 +1,45 @@
+import PlateArt from './PlateArt'
+import TagChip from './TagChip'
+
+function RestaurantCard({ restaurant }) {
+  return (
+    <article className="restaurant-card">
+      <div className={`image-shell bg-gradient-to-br ${restaurant.accent}`}>
+        <span className="verified-pill">
+          <span className="verified-dot"></span>
+          Verified Halal
+        </span>
+        <PlateArt variant={restaurant.plate} />
+      </div>
+
+      <div className="space-y-2 px-4 pb-4 pt-3">
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <h3 className="truncate text-[1.08rem] font-semibold text-slate-900">
+              {restaurant.name}
+            </h3>
+            <p className="mt-1 text-[0.78rem] text-slate-500">
+              {[restaurant.cuisine, restaurant.address].filter(Boolean).join(' - ')}
+            </p>
+          </div>
+
+          <span className="rating-badge">
+            {restaurant.badgeText}
+          </span>
+        </div>
+
+        <div className="flex flex-wrap gap-2 pt-1">
+          {restaurant.tags.map((tag) => (
+            <TagChip
+              key={tag}
+              label={tag}
+              className="tag-chip"
+            />
+          ))}
+        </div>
+      </div>
+    </article>
+  )
+}
+
+export default RestaurantCard
