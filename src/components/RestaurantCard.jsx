@@ -1,9 +1,13 @@
 import PlateArt from './PlateArt'
 import TagChip from './TagChip'
 
-function RestaurantCard({ restaurant }) {
+function RestaurantCard({ restaurant, isSelected = false, onSelect }) {
   return (
-    <article className="restaurant-card">
+    <article
+      className={`restaurant-card cursor-pointer transition duration-200 hover:-translate-y-0.5 ${
+        isSelected ? 'restaurant-card-selected' : ''
+      }`}
+    >
       <div className={`image-shell bg-gradient-to-br ${restaurant.accent}`}>
         <span className="verified-pill">
           <span className="verified-dot"></span>
@@ -12,7 +16,13 @@ function RestaurantCard({ restaurant }) {
         <PlateArt variant={restaurant.plate} />
       </div>
 
-      <div className="space-y-2 px-4 pb-4 pt-3">
+      <button
+        type="button"
+        onClick={() => onSelect?.(restaurant.id)}
+        className="block w-full text-left"
+        aria-pressed={isSelected}
+      >
+        <div className="space-y-2 px-4 pb-4 pt-3">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <h3 className="truncate text-[1.08rem] font-semibold text-slate-900">
@@ -37,7 +47,8 @@ function RestaurantCard({ restaurant }) {
             />
           ))}
         </div>
-      </div>
+        </div>
+      </button>
     </article>
   )
 }

@@ -108,6 +108,13 @@ input {
     @apply overflow-hidden rounded-[24px] border border-black/6 bg-[var(--color-card)] shadow-[0_16px_48px_rgba(40,63,48,0.08)];
   }
 
+  .restaurant-card-selected {
+    @apply border-emerald-900/30 ring-2 ring-emerald-900/12;
+    box-shadow:
+      0 20px 54px rgba(40, 63, 48, 0.12),
+      0 0 0 1px rgba(17, 72, 47, 0.08);
+  }
+
   .image-shell {
     @apply relative isolate h-[200px] overflow-hidden;
   }
@@ -194,25 +201,6 @@ input {
     @apply mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-emerald-950 px-4 text-sm font-semibold text-white shadow-[0_18px_32px_rgba(20,66,40,0.18)];
   }
 
-  .map-pin {
-    @apply absolute z-20 flex h-11 w-11 items-center justify-center rounded-full border border-emerald-950/12 bg-[rgba(249,247,242,0.96)] text-emerald-950 shadow-[0_14px_32px_rgba(50,64,52,0.16)];
-  }
-
-  .map-pin-top {
-    right: 54px;
-    top: 44%;
-  }
-
-  .map-pin-left {
-    left: 72px;
-    top: 62%;
-  }
-
-  .map-pin-bottom {
-    left: 45%;
-    bottom: 76px;
-  }
-
   .zoom-controls {
     @apply absolute bottom-16 right-6 z-20 flex w-14 flex-col overflow-hidden rounded-2xl border border-black/5 bg-white/90 shadow-[0_20px_42px_rgba(50,64,52,0.14)];
   }
@@ -223,6 +211,59 @@ input {
 
   .target-control {
     @apply absolute bottom-6 right-6 z-20 flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-950 text-white shadow-[0_18px_32px_rgba(20,66,40,0.22)];
+  }
+
+  .leaflet-map {
+    height: 100%;
+    width: 100%;
+    z-index: 0;
+  }
+
+  .leaflet-container {
+    background: #d4d6cd;
+    font-family: var(--font-sans);
+  }
+
+  .leaflet-control-attribution {
+    font-size: 10px;
+  }
+
+  .restaurant-marker-wrapper {
+    background: transparent;
+    border: none;
+  }
+
+  .restaurant-marker-pin {
+    position: relative;
+    width: 22px;
+    height: 22px;
+    border-radius: 999px 999px 999px 0;
+    transform: rotate(-45deg);
+    background: linear-gradient(180deg, #215f39 0%, #114b2f 100%);
+    border: 3px solid rgba(255, 255, 255, 0.96);
+    box-shadow: 0 12px 24px rgba(17, 72, 47, 0.24);
+  }
+
+  .restaurant-marker-pin::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: #ffffff;
+    transform: translate(-50%, -50%);
+  }
+
+  .restaurant-popup .leaflet-popup-content-wrapper {
+    border-radius: 18px;
+    background: rgba(249, 247, 242, 0.98);
+    box-shadow: 0 16px 34px rgba(33, 50, 39, 0.16);
+  }
+
+  .restaurant-popup .leaflet-popup-tip {
+    background: rgba(249, 247, 242, 0.98);
   }
 
   .plate-art {
@@ -426,14 +467,5 @@ input {
     width: auto;
     max-width: none;
     padding: 20px;
-  }
-
-  .map-pin-top {
-    right: 22px;
-    top: 48%;
-  }
-
-  .map-pin-left {
-    left: 22px;
   }
 }

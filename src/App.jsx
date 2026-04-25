@@ -1,13 +1,20 @@
 import Header from './components/Header'
+import RestaurantMap from './components/RestaurantMap'
 import RestaurantCard from './components/RestaurantCard'
 import Sidebar from './components/Sidebar'
 import TagChip from './components/TagChip'
 import { menuData } from './data/appData'
-import { Icon, MapPinIcon } from './components/icons'
 import useAppData from './hooks/useAppData'
 
 function App() {
-  const { categories, featuredRestaurant, loading, error, restaurants } = useAppData()
+  const {
+    categories,
+    loading,
+    error,
+    restaurants,
+    selectedRestaurant,
+    setSelectedRestaurantId,
+  } = useAppData()
 
   return (
     <div className="min-h-screen bg-[var(--page-bg)] px-4 py-4 text-slate-900 antialiased sm:px-5">
@@ -60,74 +67,19 @@ function App() {
                 </div>
               ) : (
                 restaurants.map((restaurant) => (
-                  <RestaurantCard key={restaurant.id} restaurant={restaurant} />
+                  <RestaurantCard
+                    key={restaurant.id}
+                    restaurant={restaurant}
+                    isSelected={selectedRestaurant?.id === restaurant.id}
+                    onSelect={setSelectedRestaurantId}
+                  />
                 ))
               )}
             </div>
           </section>
         </main>
 
-        <section className="map-panel">
-          <div className="map-illustration">
-            <div className="map-grid"></div>
-            <div className="map-lines map-lines-a"></div>
-            <div className="map-lines map-lines-b"></div>
-            <div className="map-lines map-lines-c"></div>
-
-            <div className="map-card">
-              <div className="flex items-start gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-900 text-white shadow-[0_12px_24px_rgba(17,72,47,0.28)]">
-                  <Icon className="h-5 w-5">
-                    <path d="m7 7 10 10" />
-                    <path d="m17 7-10 10" />
-                  </Icon>
-                </div>
-
-                <div>
-                  <p className="text-[0.6rem] font-bold uppercase tracking-[0.22em] text-emerald-950/50">
-                    Selected Result
-                  </p>
-                  <h2 className="mt-1 text-[1.65rem] font-semibold tracking-[-0.04em] text-emerald-950">
-                    {featuredRestaurant.title}
-                  </h2>
-                </div>
-              </div>
-
-              <div className="mt-5 space-y-3 text-sm text-emerald-950/70">
-                {featuredRestaurant.details.map((detail) => (
-                  <div key={detail} className="flex items-center gap-3">
-                    <span className="map-card-bullet"></span>
-                    <span>{detail}</span>
-                  </div>
-                ))}
-              </div>
-
-              <button type="button" className="direction-button">
-                <MapPinIcon className="h-4 w-4" />
-                Get Directions
-              </button>
-            </div>
-
-            <button type="button" className="map-pin map-pin-top" aria-label="Pinned location">
-              <MapPinIcon className="h-4 w-4" />
-            </button>
-            <button type="button" className="map-pin map-pin-left" aria-label="Pinned location">
-              <MapPinIcon className="h-4 w-4" />
-            </button>
-            <button type="button" className="map-pin map-pin-bottom" aria-label="Pinned location">
-              <MapPinIcon className="h-4 w-4" />
-            </button>
-
-            <div className="zoom-controls">
-              <button type="button">+</button>
-              <button type="button">-</button>
-            </div>
-
-            <button type="button" className="target-control" aria-label="Target location">
-              <MapPinIcon className="h-4 w-4" />
-            </button>
-          </div>
-        </section>
+        <RestaurantMap />
       </div>
     </div>
   )

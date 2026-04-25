@@ -1,4 +1,4 @@
-import { createContext } from 'react'
+import { createContext, useEffect, useState } from 'react'
 import { fallbackCategories } from '../data/appData'
 import useRestaurants from '../hooks/useRestaurants'
 
@@ -20,36 +20,35 @@ function buildCategories(restaurants) {
   return ['All', ...dynamicCategories.slice(0, 3)]
 }
 
-function buildFeaturedRestaurant(restaurants) {
-  const featured = restaurants[0]
-
-  if (!featured) {
-    return {
-      title: 'No restaurant selected',
-      details: ['Waiting for sheet data'],
-    }
-  }
-
-  return {
-    title: featured.name,
-    details: [featured.hours, featured.phone, featured.address].filter(Boolean),
-  }
-}
-
 function AppDataProvider({ children }) {
   const { restaurants, loading, error } = useRestaurants()
+  const [selectedRestaurantId, setSelectedRestaurantId] = useState(null)
+
+  useEffect(() => {
+    if (restaurants.length === 0) {
+      setSelectedRestaurantId(null)
+      return
+    }
+
+    const hasSelectedRestaurant = restaurants.some(
+      (restaurant) => restaurant.id === selectedRestaurantId,
+    )
+
+    if (!hasSelectedRestaurant) {
+      setSelectedRestaurantId(restaurants[0].id)
+    }
+  }, [restaurants, selectedRestaurantId])
+
+  const selectedRestaurant =
+    restaurants.find((restaurant) => restaurant.id === selectedRestaurantId) || null
 
   const state = {
     restaurants,
     loading,
     error,
     categories: buildCategories(restaurants),
-    featuredRestaurant: loading && restaurants.length === 0
-      ? {
-          title: 'Loading restaurants',
-          details: ['Fetching published sheet data...'],
-        }
-      : buildFeaturedRestaurant(restaurants),
+    selectedRestaurant,
+    setSelectedRestaurantId,
   }
 
   return <AppDataContext.Provider value={state}>{children}</AppDataContext.Provider>
