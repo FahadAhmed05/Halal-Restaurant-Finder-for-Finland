@@ -1,5 +1,6 @@
 import RestaurantMap from '../components/RestaurantMap'
 import RestaurantCard from '../components/RestaurantCard'
+import RestaurantCardSkeleton from '../components/RestaurantCardSkeleton'
 import Sidebar from '../components/Sidebar'
 import TagChip from '../components/TagChip'
 import { menuData } from '../data/appData'
@@ -59,10 +60,7 @@ function HomePage() {
             {loading && filteredRestaurants.length === 0 ? (
               <div className="grid gap-5">
                 {Array.from({ length: 3 }).map((_, index) => (
-                  <div
-                    key={`skeleton-${index + 1}`}
-                    className="h-[310px] animate-pulse rounded-[24px] bg-white/70"
-                  ></div>
+                  <RestaurantCardSkeleton key={`skeleton-${index + 1}`} />
                 ))}
               </div>
             ) : filteredRestaurants.length === 0 ? (

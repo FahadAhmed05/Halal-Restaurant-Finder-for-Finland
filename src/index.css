@@ -50,6 +50,32 @@ input {
   min-height: 100vh;
 }
 
+/* Theme scrollbar (Chromium, Safari, Firefox) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(17, 72, 47, 0.35) rgba(17, 72, 47, 0.10);
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: rgba(17, 72, 47, 0.08);
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(22, 83, 47, 0.55), rgba(17, 72, 47, 0.35));
+  border-radius: 999px;
+  border: 2px solid rgba(246, 244, 237, 0.85);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(22, 83, 47, 0.7), rgba(17, 72, 47, 0.5));
+}
+
 @layer components {
   .app-shell {
     grid-template-columns: 240px minmax(0, 1.05fr) minmax(340px, 0.92fr);
@@ -168,7 +194,7 @@ input {
   }
 
   .tag-chip {
-    @apply rounded-lg bg-[#edf2ea] px-2.5 py-1 text-[0.62rem] font-bold uppercase tracking-[0.06em] text-slate-500 cursor-pointer;
+    @apply rounded-lg bg-[#edf2ea] px-2.5 py-1 text-[0.62rem] font-bold uppercase tracking-[0.06em] text-slate-500 cursor-pointer transition;
   }
 
   .map-panel {
