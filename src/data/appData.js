@@ -13,8 +13,7 @@ export const headerLinks = [
 
 export const fallbackCategories = ['All', 'Halal Certified', 'Halal Friendly', 'Open Now']
 
-export const sheetSourceUrl =
-  'https://docs.google.com/spreadsheets/d/e/2PACX-1vQZ5ewZpT_FcAuxKGMpe_MbX5oKwAvZyunvXDC6qvwAy_h5tlzVAVYAZK1Y7KvZ4S08XXZCLfp9Ssri/pubhtml?urp=gmail_link#gid=0'
+export const sheetSourceUrl = import.meta.env.VITE_GOOGLE_SHEET_URL
 
 export const restaurantCardThemes = [
   { accent: 'from-[#3d2618] via-[#855029] to-[#15110f]', plate: 'mix-grill' },
