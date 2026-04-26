@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import PlateArt from './PlateArt'
 import TagChip from './TagChip'
 
@@ -25,9 +26,13 @@ function RestaurantCard({ restaurant, isSelected = false, onSelect }) {
         <div className="space-y-2 px-4 pb-4 pt-3">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <h3 className="truncate text-[1.08rem] font-semibold text-slate-900">
+            <Link
+              to={`/${restaurant.slug}`}
+              onClick={(event) => event.stopPropagation()}
+              className="block truncate text-[1.08rem] font-semibold text-slate-900 transition hover:text-emerald-800"
+            >
               {restaurant.name}
-            </h3>
+            </Link>
             <p className="mt-1 text-[0.78rem] text-slate-500">
               {[restaurant.cuisine, restaurant.address].filter(Boolean).join(' - ')}
             </p>

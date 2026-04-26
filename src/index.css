@@ -175,6 +175,78 @@ input {
     @apply relative min-h-full bg-[var(--color-map)];
   }
 
+  .detail-page-shell {
+    background:
+      linear-gradient(180deg, rgba(249, 247, 241, 0.96) 0%, rgba(241, 239, 233, 0.98) 100%);
+  }
+
+  .detail-page-grid {
+    display: grid;
+    grid-template-columns: minmax(320px, 1.02fr) minmax(360px, 1.1fr);
+    min-height: calc(100vh - 6rem);
+  }
+
+  .detail-page-map-panel {
+    @apply relative overflow-hidden border-r border-black/6 bg-[#d6d8d0];
+  }
+
+  .detail-page-content {
+    @apply min-w-0 bg-[var(--color-card)];
+  }
+
+  .detail-map-shell {
+    @apply relative h-full min-h-[680px] overflow-hidden;
+  }
+
+  .detail-map-label {
+    @apply absolute bottom-10 left-1/2 z-[500] inline-flex -translate-x-1/2 items-center gap-2 rounded-full bg-emerald-950 px-4 py-2 text-sm font-semibold text-white shadow-[0_18px_32px_rgba(20,66,40,0.24)];
+  }
+
+  .detail-hero {
+    @apply relative isolate h-[360px] overflow-hidden border-b border-black/6;
+  }
+
+  .detail-back-button {
+    @apply absolute left-5 top-5 z-20 flex h-11 w-11 items-center justify-center rounded-full bg-[rgba(255,255,255,0.92)] text-emerald-950 shadow-[0_16px_30px_rgba(30,45,35,0.16)] transition hover:-translate-y-0.5;
+  }
+
+  .detail-content-inner {
+    @apply px-8 pb-8 pt-6;
+  }
+
+  .detail-top-pill {
+    @apply static bg-[#9a4c72];
+  }
+
+  .detail-meta-inline {
+    @apply inline-flex items-center rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-900;
+  }
+
+  .detail-dot-divider {
+    @apply inline-flex items-center gap-3;
+  }
+
+  .detail-dot-divider::before {
+    content: '';
+    @apply h-1.5 w-1.5 rounded-full bg-emerald-950/30;
+  }
+
+  .detail-info-card {
+    @apply rounded-[26px] border border-emerald-950/6 bg-[#eef5ee] px-5 py-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.65)];
+  }
+
+  .detail-info-card-compact {
+    @apply bg-[#edf3e6];
+  }
+
+  .detail-info-label {
+    @apply text-[0.62rem] font-bold uppercase tracking-[0.22em] text-emerald-950/38;
+  }
+
+  .detail-card-link {
+    @apply mt-5 inline-flex h-11 items-center rounded-2xl bg-emerald-950 px-4 text-sm font-semibold text-white shadow-[0_14px_28px_rgba(20,66,40,0.18)];
+  }
+
   .map-illustration {
     @apply relative h-full overflow-hidden;
     background:
@@ -290,6 +362,11 @@ input {
     border-radius: 999px;
     background: #ffffff;
     transform: translate(-50%, -50%);
+  }
+
+  .restaurant-marker-pin-large {
+    width: 26px;
+    height: 26px;
   }
 
   .restaurant-popup .leaflet-popup-content-wrapper {
@@ -468,6 +545,16 @@ input {
     grid-template-columns: 210px minmax(0, 1fr);
   }
 
+  .detail-page-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-page-map-panel {
+    min-height: 460px;
+    border-right: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  }
+
   .map-panel {
     grid-column: 1 / -1;
     min-height: 540px;
@@ -507,5 +594,13 @@ input {
     width: auto;
     max-width: none;
     padding: 20px;
+  }
+
+  .detail-content-inner {
+    @apply px-5 pb-6 pt-5;
+  }
+
+  .detail-hero {
+    height: 280px;
   }
 }

@@ -62,9 +62,11 @@ function normalizeRestaurant(row, index) {
   const lat = parseCoordinate(row.lat)
   const lng = parseCoordinate(row.lng)
   const theme = restaurantCardThemes[index % restaurantCardThemes.length]
+  const slug = createSlug([name, city]) || `restaurant-${index + 1}`
 
   return {
     id: createSlug([name, city, index + 1]) || `restaurant-${index + 1}`,
+    slug,
     name,
     address,
     city,

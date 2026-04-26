@@ -81,6 +81,8 @@ function AppDataProvider({ children }) {
     setSelectedCuisine,
     selectedRestaurant,
     setSelectedRestaurantId,
+    getRestaurantBySlug: (slug) =>
+      restaurants.find((restaurant) => restaurant.slug === slug) || null,
   }
 
   return <AppDataContext.Provider value={state}>{children}</AppDataContext.Provider>
