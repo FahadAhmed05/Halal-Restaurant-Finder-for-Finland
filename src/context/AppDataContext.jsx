@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useEffect, useMemo, useState } from 'react'
 import { fallbackCategories } from '../data/appData'
 import useRestaurants from '../hooks/useRestaurants'
 
@@ -17,36 +17,68 @@ function buildCategories(restaurants) {
     return fallbackCategories
   }
 
-  return ['All', ...dynamicCategories.slice(0, 3)]
+  return ['All', ...dynamicCategories]
 }
 
 function AppDataProvider({ children }) {
   const { restaurants, loading, error } = useRestaurants()
   const [selectedRestaurantId, setSelectedRestaurantId] = useState(null)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [searchMode, setSearchMode] = useState('all')
+  const [selectedCuisine, setSelectedCuisine] = useState('All')
+
+  const filteredRestaurants = useMemo(() => {
+    const normalizedQuery = searchQuery.trim().toLowerCase()
+
+    return restaurants.filter((restaurant) => {
+      const matchesSearch =
+        normalizedQuery.length === 0 ||
+        (searchMode === 'restaurant' &&
+          restaurant.name.toLowerCase().includes(normalizedQuery)) ||
+        (searchMode === 'city' &&
+          restaurant.city.toLowerCase().includes(normalizedQuery)) ||
+        (searchMode === 'all' &&
+          (restaurant.name.toLowerCase().includes(normalizedQuery) ||
+            restaurant.city.toLowerCase().includes(normalizedQuery)))
+
+      const matchesCuisine =
+        selectedCuisine === 'All' || restaurant.cuisine === selectedCuisine
+
+      return matchesSearch && matchesCuisine
+    })
+  }, [restaurants, searchQuery, searchMode, selectedCuisine])
 
   useEffect(() => {
-    if (restaurants.length === 0) {
+    if (filteredRestaurants.length === 0) {
       setSelectedRestaurantId(null)
       return
     }
 
-    const hasSelectedRestaurant = restaurants.some(
+    const hasSelectedRestaurant = filteredRestaurants.some(
       (restaurant) => restaurant.id === selectedRestaurantId,
     )
 
     if (!hasSelectedRestaurant) {
-      setSelectedRestaurantId(restaurants[0].id)
+      setSelectedRestaurantId(filteredRestaurants[0].id)
     }
-  }, [restaurants, selectedRestaurantId])
+  }, [filteredRestaurants, selectedRestaurantId])
 
   const selectedRestaurant =
-    restaurants.find((restaurant) => restaurant.id === selectedRestaurantId) || null
+    filteredRestaurants.find((restaurant) => restaurant.id === selectedRestaurantId) ||
+    null
 
   const state = {
     restaurants,
+    filteredRestaurants,
     loading,
     error,
     categories: buildCategories(restaurants),
+    searchQuery,
+    setSearchQuery,
+    searchMode,
+    setSearchMode,
+    selectedCuisine,
+    setSelectedCuisine,
     selectedRestaurant,
     setSelectedRestaurantId,
   }

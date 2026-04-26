@@ -1,6 +1,7 @@
 function TagChip({
   label,
   isActive = false,
+  onClick,
   className = '',
   activeClassName = '',
   inactiveClassName = '',
@@ -8,6 +9,7 @@ function TagChip({
   return (
     <button
       type="button"
+      onClick={onClick}
       className={`${className} ${isActive ? activeClassName : inactiveClassName}`.trim()}
     >
       {label}

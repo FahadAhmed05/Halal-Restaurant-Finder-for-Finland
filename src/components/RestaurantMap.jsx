@@ -80,20 +80,20 @@ function MapViewport({ selectedRestaurant }) {
 
 function RestaurantMap() {
   const {
+    filteredRestaurants,
     loading,
-    restaurants,
     selectedRestaurant,
     setSelectedRestaurantId,
   } = useAppData()
 
   const mapRestaurants = useMemo(
     () =>
-      restaurants.filter(
+      filteredRestaurants.filter(
         (restaurant) =>
           Number.isFinite(restaurant.coordinates?.lat) &&
           Number.isFinite(restaurant.coordinates?.lng),
       ),
-    [restaurants],
+    [filteredRestaurants],
   )
 
   return (
