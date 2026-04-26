@@ -168,7 +168,7 @@ input {
   }
 
   .tag-chip {
-    @apply rounded-lg bg-[#edf2ea] px-2.5 py-1 text-[0.62rem] font-bold uppercase tracking-[0.06em] text-slate-500;
+    @apply rounded-lg bg-[#edf2ea] px-2.5 py-1 text-[0.62rem] font-bold uppercase tracking-[0.06em] text-slate-500 cursor-pointer;
   }
 
   .map-panel {

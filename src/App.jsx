@@ -45,7 +45,7 @@ function App() {
                     label={category}
                     isActive={selectedCuisine === category}
                     onClick={() => setSelectedCuisine(category)}
-                    className="filter-chip px-4 py-2 text-sm"
+                    className="filter-chip px-4 py-2 text-sm cursor-pointer"
                     activeClassName="filter-chip-active"
                     inactiveClassName="filter-chip-idle"
                   />
