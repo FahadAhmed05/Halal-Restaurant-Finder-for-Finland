@@ -77,7 +77,7 @@ function normalizeRestaurant(row, index) {
     hours,
     coordinates: { lat, lng },
     tags: buildTags({ cuisine, city, halalStatus }),
-    badgeText: halalStatus || city || 'Halal Spot',
+    badgeText: city || 'Halal Spot',
     accent: theme.accent,
     plate: theme.plate,
   }
