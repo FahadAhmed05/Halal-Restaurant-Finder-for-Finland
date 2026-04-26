@@ -6,8 +6,8 @@ export const menuData = [
 ]
 
 export const headerLinks = [
-  { id: 1, label: 'Discover', active: true },
-  { id: 2, label: 'Favorites', active: false },
+  { id: 1, label: 'Discover', active: true, redirectUrl: "/" },
+  { id: 2, label: 'Favorites', active: false, redirectUrl: "/favorites" },
   { id: 3, label: 'Recent', active: false },
 ]
 

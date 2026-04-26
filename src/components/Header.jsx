@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { headerLinks } from '../data/appData'
 import useAppData from '../hooks/useAppData'
 import { Icon, MapPinIcon, SearchIcon } from './icons'
@@ -17,14 +18,13 @@ function Header() {
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
         <nav className="hidden items-center gap-6 text-sm font-medium text-emerald-950/45 md:flex">
           {headerLinks.map((link) => (
-            <a
+            <Link
               key={link.id}
-              href="/"
-              onClick={(event) => event.preventDefault()}
+              to={link.redirectUrl}
               className={link.active ? 'text-emerald-950' : undefined}
             >
               {link.label}
-            </a>
+            </Link>
           ))}
         </nav>
 
