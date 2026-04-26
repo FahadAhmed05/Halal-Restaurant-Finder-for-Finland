@@ -1,3 +1,4 @@
+import { NavLink } from 'react-router-dom'
 import { SidebarIcon } from './icons'
 
 function Sidebar({ title, subtitle, menuItems, actionLabel }) {
@@ -13,14 +14,34 @@ function Sidebar({ title, subtitle, menuItems, actionLabel }) {
 
         <nav className="space-y-2 px-4 py-5">
           {menuItems.map((item) => (
-            <button
-              type="button"
-              key={item.id}
-              className={`nav-item ${item.active ? 'nav-item-active' : 'nav-item-idle'}`}
-            >
-              <SidebarIcon type={item.icon} />
-              <span>{item.label}</span>
-            </button>
+            item.path ? (
+              <NavLink
+                key={item.id}
+                to={item.path}
+                className={({ isActive }) =>
+                  `nav-item ${isActive ? 'nav-item-active' : 'nav-item-idle'}`
+                }
+              >
+                <SidebarIcon type={item.icon} />
+                <span className="flex min-w-0 items-center gap-2">
+                  <span className="truncate">{item.label}</span>
+                  {typeof item.badge === 'number' && item.badge > 0 ? (
+                    <span className="inline-flex min-w-6 items-center justify-center rounded-full bg-emerald-950 px-2 py-0.5 text-[0.7rem] font-bold text-white shadow-[0_12px_20px_rgba(20,66,40,0.18)]">
+                      {item.badge}
+                    </span>
+                  ) : null}
+                </span>
+              </NavLink>
+            ) : (
+              <button
+                type="button"
+                key={item.id}
+                className={`nav-item ${item.active ? 'nav-item-active' : 'nav-item-idle'}`}
+              >
+                <SidebarIcon type={item.icon} />
+                <span>{item.label}</span>
+              </button>
+            )
           ))}
         </nav>
       </div>

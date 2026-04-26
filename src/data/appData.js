@@ -1,7 +1,7 @@
 export const menuData = [
-  { id: 1, label: 'Restaurants', icon: 'restaurant', active: true },
+  { id: 1, label: 'Restaurants', icon: 'restaurant', path: '/', active: true },
   { id: 2, label: 'Mosques', icon: 'mosque', active: false },
-  { id: 3, label: 'Favorites', icon: 'heart', active: false },
+  { id: 3, label: 'Favorites', icon: 'heart', path: '/favorites', active: false },
   { id: 4, label: 'Settings', icon: 'settings', active: false },
 ]
 

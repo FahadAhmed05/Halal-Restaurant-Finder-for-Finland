@@ -4,6 +4,20 @@ import useRestaurants from '../hooks/useRestaurants'
 
 export const AppDataContext = createContext(null)
 
+const FAVORITES_STORAGE_KEY = 'verdant-halal:favorites'
+
+function readFavoritesFromStorage() {
+  try {
+    const raw = localStorage.getItem(FAVORITES_STORAGE_KEY)
+    if (!raw) return []
+    const parsed = JSON.parse(raw)
+    if (!Array.isArray(parsed)) return []
+    return parsed.filter((id) => typeof id === 'string' || typeof id === 'number')
+  } catch {
+    return []
+  }
+}
+
 function buildCategories(restaurants) {
   const dynamicCategories = Array.from(
     new Set(
@@ -26,6 +40,9 @@ function AppDataProvider({ children }) {
   const [searchQuery, setSearchQuery] = useState('')
   const [searchMode, setSearchMode] = useState('all')
   const [selectedCuisine, setSelectedCuisine] = useState('All')
+  const [favoriteIds, setFavoriteIds] = useState(() =>
+    typeof window === 'undefined' ? [] : readFavoritesFromStorage(),
+  )
 
   const filteredRestaurants = useMemo(() => {
     const normalizedQuery = searchQuery.trim().toLowerCase()
@@ -63,9 +80,37 @@ function AppDataProvider({ children }) {
     }
   }, [filteredRestaurants, selectedRestaurantId])
 
+  useEffect(() => {
+    try {
+      localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(favoriteIds))
+    } catch {
+      // ignore storage failures (quota / privacy mode)
+    }
+  }, [favoriteIds])
+
   const selectedRestaurant =
     filteredRestaurants.find((restaurant) => restaurant.id === selectedRestaurantId) ||
     null
+
+  const favoritesSet = useMemo(() => new Set(favoriteIds), [favoriteIds])
+
+  const isFavorite = (restaurantId) => favoritesSet.has(restaurantId)
+
+  const toggleFavorite = (restaurantId) => {
+    setFavoriteIds((current) => {
+      const set = new Set(current)
+      if (set.has(restaurantId)) {
+        set.delete(restaurantId)
+      } else {
+        set.add(restaurantId)
+      }
+      return Array.from(set)
+    })
+  }
+
+  const removeFavorite = (restaurantId) => {
+    setFavoriteIds((current) => current.filter((id) => id !== restaurantId))
+  }
 
   const state = {
     restaurants,
@@ -81,6 +126,11 @@ function AppDataProvider({ children }) {
     setSelectedCuisine,
     selectedRestaurant,
     setSelectedRestaurantId,
+    favoriteIds,
+    favoritesCount: favoriteIds.length,
+    isFavorite,
+    toggleFavorite,
+    removeFavorite,
     getRestaurantBySlug: (slug) =>
       restaurants.find((restaurant) => restaurant.slug === slug) || null,
   }

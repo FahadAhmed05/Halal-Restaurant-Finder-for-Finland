@@ -2,26 +2,23 @@ import RestaurantMap from '../components/RestaurantMap'
 import RestaurantCard from '../components/RestaurantCard'
 import RestaurantCardSkeleton from '../components/RestaurantCardSkeleton'
 import Sidebar from '../components/Sidebar'
-import TagChip from '../components/TagChip'
 import { menuData } from '../data/appData'
 import useAppData from '../hooks/useAppData'
 
-function HomePage() {
+function FavoritesPage() {
   const {
-    categories,
-    filteredRestaurants,
+    restaurants,
     loading,
     error,
-    searchQuery,
-    selectedCuisine,
-    selectedRestaurant,
-    setSelectedCuisine,
-    setSelectedRestaurantId,
+    favoriteIds,
     favoritesCount,
+    selectedRestaurant,
+    setSelectedRestaurantId,
     isFavorite,
     toggleFavorite,
   } = useAppData()
 
+  const favorites = restaurants.filter((restaurant) => favoriteIds.includes(restaurant.id))
   const menuItems = menuData.map((item) =>
     item.id === 3 ? { ...item, badge: favoritesCount } : item,
   )
@@ -39,22 +36,11 @@ function HomePage() {
         <section className="h-full px-6 pb-6 pt-5">
           <div className="mb-5">
             <h1 className="text-[2rem] font-semibold tracking-[-0.05em] text-emerald-950">
-              Top Halal Restaurants
+              Favorites
             </h1>
-
-            <div className="mt-4 flex flex-wrap gap-3">
-              {categories.map((category) => (
-                <TagChip
-                  key={category}
-                  label={category}
-                  isActive={selectedCuisine === category}
-                  onClick={() => setSelectedCuisine(category)}
-                  className="filter-chip cursor-pointer px-4 py-2 text-sm"
-                  activeClassName="filter-chip-active"
-                  inactiveClassName="filter-chip-idle"
-                />
-              ))}
-            </div>
+            <p className="mt-2 text-sm text-emerald-950/55">
+              Your saved halal spots ({favoritesCount}).
+            </p>
           </div>
 
           {error ? (
@@ -64,19 +50,18 @@ function HomePage() {
           ) : null}
 
           <div className="restaurant-feed">
-            {loading && filteredRestaurants.length === 0 ? (
+            {loading && favorites.length === 0 ? (
               <div className="grid gap-5">
                 {Array.from({ length: 3 }).map((_, index) => (
-                  <RestaurantCardSkeleton key={`skeleton-${index + 1}`} />
+                  <RestaurantCardSkeleton key={`fav-skeleton-${index + 1}`} />
                 ))}
               </div>
-            ) : filteredRestaurants.length === 0 ? (
+            ) : favorites.length === 0 ? (
               <div className="rounded-[24px] border border-dashed border-emerald-900/16 bg-white/55 px-5 py-8 text-center text-sm text-emerald-950/65">
-                No restaurants match your current search and cuisine filter.
-                {searchQuery ? ` Search: "${searchQuery}".` : ''}
+                No favorites yet. Tap the heart on any restaurant to save it here.
               </div>
             ) : (
-              filteredRestaurants.map((restaurant) => (
+              favorites.map((restaurant) => (
                 <RestaurantCard
                   key={restaurant.id}
                   restaurant={restaurant}
@@ -96,4 +81,5 @@ function HomePage() {
   )
 }
 
-export default HomePage
+export default FavoritesPage
+

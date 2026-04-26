@@ -1,6 +1,8 @@
 import { Route, Routes } from 'react-router-dom'
 import Header from './components/Header'
 import HomePage from './pages/HomePage'
+import FavoritesPage from './pages/FavoritesPage'
+import WishlistPage from './pages/WishlistPage'
 import RestaurantDetailPage from './pages/RestaurantDetailPage'
 
 function App() {
@@ -10,6 +12,8 @@ function App() {
 
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/favorites" element={<FavoritesPage />} />
+        <Route path="/wishlist" element={<WishlistPage />} />
         <Route path="/:slug" element={<RestaurantDetailPage />} />
       </Routes>
     </div>
