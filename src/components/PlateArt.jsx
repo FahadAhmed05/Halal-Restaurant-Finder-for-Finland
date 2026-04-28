@@ -5,7 +5,7 @@ import sampleImage4 from "../assets/images/sampleImage4.jpg";
 import sampleImage5 from "../assets/images/sampleImage5.jpg";
 import sampleImage6 from "../assets/images/sampleImage6.jpg";
 import sampleImage7 from "../assets/images/sampleImage7.jpg";
-import sampleImage9 from "../assets/images/sampleImage9jpg";
+import sampleImage9 from "../assets/images/sampleImage9.jpg";
 
 const plateImages = {
   'smoky-grill-feast': sampleImage1,
