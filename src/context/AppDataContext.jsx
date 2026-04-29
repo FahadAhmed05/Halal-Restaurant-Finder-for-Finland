@@ -1,10 +1,9 @@
-import { createContext, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import AppDataContext from './appDataContextInstance'
 import { fallbackCategories } from '../data/appData'
 import useGeolocation from '../hooks/useGeolocation'
 import useRestaurants from '../hooks/useRestaurants'
 import { findNearestRestaurant } from '../utils/geo'
-
-export const AppDataContext = createContext(null)
 
 const FAVORITES_STORAGE_KEY = 'verdant-halal:favorites'
 
@@ -73,33 +72,10 @@ function AppDataProvider({ children }) {
     })
   }, [restaurants, searchQuery, searchScope, selectedCuisine])
 
-  useEffect(() => {
-    if (filteredRestaurants.length === 0) {
-      setSelectedRestaurantId(null)
-      return
-    }
-
-    const hasSelectedRestaurant = filteredRestaurants.some(
-      (restaurant) => restaurant.id === selectedRestaurantId,
-    )
-
-    if (!hasSelectedRestaurant) {
-      setSelectedRestaurantId(filteredRestaurants[0].id)
-    }
-  }, [filteredRestaurants, selectedRestaurantId])
-
   const nearestRestaurantResult = useMemo(
     () => findNearestRestaurant(filteredRestaurants, userLocation),
     [filteredRestaurants, userLocation],
   )
-
-  useEffect(() => {
-    if (!isNearMeActive || !nearestRestaurantResult?.restaurant) {
-      return
-    }
-
-    setSelectedRestaurantId(nearestRestaurantResult.restaurant.id)
-  }, [isNearMeActive, nearestRestaurantResult])
 
   useEffect(() => {
     try {
@@ -109,9 +85,25 @@ function AppDataProvider({ children }) {
     }
   }, [favoriteIds])
 
-  const selectedRestaurant =
-    filteredRestaurants.find((restaurant) => restaurant.id === selectedRestaurantId) ||
-    null
+  const resolvedSelectedRestaurant = useMemo(() => {
+    if (filteredRestaurants.length === 0) {
+      return null
+    }
+
+    if (isNearMeActive && nearestRestaurantResult?.restaurant) {
+      return nearestRestaurantResult.restaurant
+    }
+
+    return (
+      filteredRestaurants.find((restaurant) => restaurant.id === selectedRestaurantId) ||
+      filteredRestaurants[0]
+    )
+  }, [
+    filteredRestaurants,
+    isNearMeActive,
+    nearestRestaurantResult,
+    selectedRestaurantId,
+  ])
 
   const favoritesSet = useMemo(() => new Set(favoriteIds), [favoriteIds])
 
@@ -155,7 +147,7 @@ function AppDataProvider({ children }) {
     setSearchScope,
     selectedCuisine,
     setSelectedCuisine,
-    selectedRestaurant,
+    selectedRestaurant: resolvedSelectedRestaurant,
     setSelectedRestaurantId: selectRestaurant,
     requestNearMe,
     isNearMeActive,

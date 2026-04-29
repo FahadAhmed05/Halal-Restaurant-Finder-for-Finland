@@ -5,16 +5,13 @@ import { Icon, MapPinIcon, SearchIcon } from './icons'
 
 function Header() {
   const {
-    categories,
     geolocationError,
     geolocationLoading,
     requestNearMe,
     searchQuery,
     searchScope,
-    selectedCuisine,
     setSearchQuery,
     setSearchScope,
-    setSelectedCuisine,
   } =
     useAppData()
 
@@ -67,7 +64,7 @@ function Header() {
 
             <button
               type="button"
-              className="near-button near-button-compact"
+              className="near-button near-button-compact cursor-pointer"
               onClick={requestNearMe}
               disabled={geolocationLoading}
               title={geolocationError || 'Find restaurants near your location'}
