@@ -171,7 +171,7 @@ input {
   }
 
   .restaurant-card {
-    @apply overflow-hidden rounded-[24px] border border-black/6 bg-[var(--color-card)] shadow-[0_16px_48px_rgba(40,63,48,0.08)];
+    @apply overflow-hidden rounded-[22px] border border-emerald-950/8 bg-[var(--color-card)] shadow-[0_18px_44px_rgba(40,63,48,0.09)] transition-all duration-200;
   }
 
   .restaurant-card-selected {
@@ -182,11 +182,12 @@ input {
   }
 
   .image-shell {
-    @apply relative isolate h-[200px] overflow-hidden;
+    @apply relative isolate h-[190px] overflow-hidden rounded-b-[18px];
+    box-shadow: inset 0 -18px 26px rgba(0, 0, 0, 0.04);
   }
 
   .verified-pill {
-    @apply absolute right-4 top-4 z-20 inline-flex items-center gap-2 rounded-full bg-emerald-950 px-3 py-1 text-[0.58rem] font-bold uppercase tracking-[0.16em] text-white;
+    @apply absolute right-4 top-4 z-20 inline-flex items-center gap-2 rounded-full bg-emerald-950/96 px-3 py-1 text-[0.56rem] font-bold uppercase tracking-[0.15em] text-white;
   }
 
   .verified-dot {
@@ -194,15 +195,15 @@ input {
   }
 
   .rating-badge {
-    @apply inline-flex items-center gap-1 rounded-xl bg-[#cdeccf] px-2.5 py-1 text-xs font-bold text-emerald-950;
+    @apply inline-flex items-center gap-1 rounded-xl bg-[#d9f1cf] px-2.5 py-[0.38rem] text-[0.72rem] font-bold text-emerald-950 shadow-[inset_0_1px_0_rgba(255,255,255,0.78)];
   }
 
   .tag-chip {
-    @apply rounded-lg bg-[#edf2ea] px-2.5 py-1 text-[0.62rem] font-bold uppercase tracking-[0.06em] text-slate-500 cursor-pointer transition;
+    @apply rounded-md bg-[#eef3ea] px-2.5 py-1 text-[0.58rem] font-bold uppercase tracking-[0.08em] text-slate-500 cursor-pointer transition hover:bg-[#e5eee1];
   }
 
   .tag-chip-city {
-    @apply bg-[#dff2e5] text-emerald-900 ring-1 ring-emerald-900/8;
+    @apply bg-[#e1f1e4] text-emerald-900 ring-1 ring-emerald-900/8;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
   }
 
