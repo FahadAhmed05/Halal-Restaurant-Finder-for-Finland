@@ -26,7 +26,13 @@ function PlateArt({ variant }) {
   return (
     <img
       src={plateImages[variant] || sampleImage3}
-      alt={variant}
+      alt=""
+      aria-hidden="true"
+      loading="lazy"
+      decoding="async"
+      fetchPriority="low"
+      width="640"
+      height="420"
       className="w-full h-full object-contain"
     />
   );

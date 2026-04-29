@@ -57,6 +57,7 @@ function Header() {
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
                 placeholder={searchPlaceholder}
+                aria-label="Search restaurants"
                 className="w-full bg-transparent text-sm text-emerald-950 placeholder:text-emerald-950/35 focus:outline-none"
               />
               <SearchIcon />
