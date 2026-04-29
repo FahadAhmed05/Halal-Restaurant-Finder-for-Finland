@@ -1,9 +1,11 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { headerLinks } from '../data/appData'
 import useAppData from '../hooks/useAppData'
 import { Icon, MapPinIcon, SearchIcon } from './icons'
 
 function Header() {
+  const location = useLocation()
+  const isDetailPage = location.pathname !== '/' && !location.pathname.startsWith('/favorites') && !location.pathname.startsWith('/wishlist')
   const {
     geolocationError,
     geolocationLoading,
@@ -35,33 +37,37 @@ function Header() {
           ))}
         </nav>
 
-        <div className="header-search-wrap lg:ml-auto">
+        <div className={`${isDetailPage ? 'lg:ml-auto' : 'header-search-wrap lg:ml-auto'}`}>
           <div className="header-search-bar">
-            <label className="search-inline-mode">
-              <select
-                value={searchScope}
-                onChange={(event) => setSearchScope(event.target.value)}
-                className="search-inline-select"
-                aria-label="Choose search type"
-              >
-                <option value="all">All</option>
-                <option value="cuisine">Cuisine Type</option>
-              </select>
-            </label>
+            {!isDetailPage ? (
+              <>
+                <label className="search-inline-mode">
+                  <select
+                    value={searchScope}
+                    onChange={(event) => setSearchScope(event.target.value)}
+                    className="search-inline-select"
+                    aria-label="Choose search type"
+                  >
+                    <option value="all">All</option>
+                    <option value="cuisine">Cuisine Type</option>
+                  </select>
+                </label>
 
-            <span className="search-inline-divider"></span>
+                <span className="search-inline-divider"></span>
 
-            <label className="search-shell search-shell-inline">
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(event) => setSearchQuery(event.target.value)}
-                placeholder={searchPlaceholder}
-                aria-label="Search restaurants"
-                className="w-full bg-transparent text-sm text-emerald-950 placeholder:text-emerald-950/35 focus:outline-none"
-              />
-              <SearchIcon />
-            </label>
+                <label className="search-shell search-shell-inline">
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(event) => setSearchQuery(event.target.value)}
+                    placeholder={searchPlaceholder}
+                    aria-label="Search restaurants"
+                    className="w-full bg-transparent text-sm text-emerald-950 placeholder:text-emerald-950/35 focus:outline-none"
+                  />
+                  <SearchIcon />
+                </label>
+              </>
+            ) : null}
 
             <button
               type="button"
