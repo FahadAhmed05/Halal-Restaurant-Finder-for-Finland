@@ -6,6 +6,9 @@ import { Icon, MapPinIcon, SearchIcon } from './icons'
 function Header() {
   const {
     categories,
+    geolocationError,
+    geolocationLoading,
+    requestNearMe,
     searchQuery,
     searchScope,
     selectedCuisine,
@@ -62,9 +65,15 @@ function Header() {
               <SearchIcon />
             </label>
 
-            <button type="button" className="near-button near-button-compact">
+            <button
+              type="button"
+              className="near-button near-button-compact"
+              onClick={requestNearMe}
+              disabled={geolocationLoading}
+              title={geolocationError || 'Find restaurants near your location'}
+            >
               <MapPinIcon className="h-4 w-4" />
-              Near Me
+              {geolocationLoading ? 'Locating...' : 'Near Me'}
             </button>
 
             <button type="button" className="profile-button" aria-label="Open profile">

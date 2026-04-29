@@ -1,6 +1,8 @@
 import { createContext, useEffect, useMemo, useState } from 'react'
 import { fallbackCategories } from '../data/appData'
+import useGeolocation from '../hooks/useGeolocation'
 import useRestaurants from '../hooks/useRestaurants'
+import { findNearestRestaurant } from '../utils/geo'
 
 export const AppDataContext = createContext(null)
 
@@ -37,12 +39,20 @@ function buildCategories(restaurants) {
 function AppDataProvider({ children }) {
   const { restaurants, loading, error } = useRestaurants()
   const [selectedRestaurantId, setSelectedRestaurantId] = useState(null)
+  const [isNearMeActive, setIsNearMeActive] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [searchScope, setSearchScope] = useState('all')
   const [selectedCuisine, setSelectedCuisine] = useState('All')
   const [favoriteIds, setFavoriteIds] = useState(() =>
     typeof window === 'undefined' ? [] : readFavoritesFromStorage(),
   )
+  const {
+    coords: userLocation,
+    error: geolocationError,
+    loading: geolocationLoading,
+    requestLocation,
+    supported: geolocationSupported,
+  } = useGeolocation()
 
   const filteredRestaurants = useMemo(() => {
     const normalizedQuery = searchQuery.trim().toLowerCase()
@@ -78,6 +88,19 @@ function AppDataProvider({ children }) {
     }
   }, [filteredRestaurants, selectedRestaurantId])
 
+  const nearestRestaurantResult = useMemo(
+    () => findNearestRestaurant(filteredRestaurants, userLocation),
+    [filteredRestaurants, userLocation],
+  )
+
+  useEffect(() => {
+    if (!isNearMeActive || !nearestRestaurantResult?.restaurant) {
+      return
+    }
+
+    setSelectedRestaurantId(nearestRestaurantResult.restaurant.id)
+  }, [isNearMeActive, nearestRestaurantResult])
+
   useEffect(() => {
     try {
       localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(favoriteIds))
@@ -93,6 +116,16 @@ function AppDataProvider({ children }) {
   const favoritesSet = useMemo(() => new Set(favoriteIds), [favoriteIds])
 
   const isFavorite = (restaurantId) => favoritesSet.has(restaurantId)
+
+  const selectRestaurant = (restaurantId) => {
+    setIsNearMeActive(false)
+    setSelectedRestaurantId(restaurantId)
+  }
+
+  const requestNearMe = () => {
+    setIsNearMeActive(true)
+    requestLocation()
+  }
 
   const toggleFavorite = (restaurantId) => {
     setFavoriteIds((current) => {
@@ -123,7 +156,14 @@ function AppDataProvider({ children }) {
     selectedCuisine,
     setSelectedCuisine,
     selectedRestaurant,
-    setSelectedRestaurantId,
+    setSelectedRestaurantId: selectRestaurant,
+    requestNearMe,
+    isNearMeActive,
+    userLocation,
+    geolocationError,
+    geolocationLoading,
+    geolocationSupported,
+    nearestRestaurant: nearestRestaurantResult?.restaurant || null,
     favoriteIds,
     favoritesCount: favoriteIds.length,
     isFavorite,

@@ -15,7 +15,19 @@ const restaurantPinIcon = divIcon({
   popupAnchor: [0, -18],
 })
 
-function MapControls({ hasRestaurants, selectedRestaurant }) {
+const userLocationPinIcon = divIcon({
+  className: 'restaurant-marker-wrapper',
+  html: '<div class="user-location-pin"></div>',
+  iconSize: [24, 24],
+  iconAnchor: [12, 12],
+})
+
+function MapControls({
+  hasRestaurants,
+  isNearMeActive,
+  selectedRestaurant,
+  userLocation,
+}) {
   const map = useMap()
 
   return (
@@ -34,6 +46,15 @@ function MapControls({ hasRestaurants, selectedRestaurant }) {
         className="target-control"
         aria-label="Center map on Finland"
         onClick={() => {
+          if (
+            isNearMeActive &&
+            Number.isFinite(userLocation?.lat) &&
+            Number.isFinite(userLocation?.lng)
+          ) {
+            map.flyTo([userLocation.lat, userLocation.lng], 13, { duration: 0.9 })
+            return
+          }
+
           if (
             hasRestaurants &&
             selectedRestaurant?.coordinates?.lat &&
@@ -56,10 +77,19 @@ function MapControls({ hasRestaurants, selectedRestaurant }) {
   )
 }
 
-function MapViewport({ selectedRestaurant }) {
+function MapViewport({ isNearMeActive, selectedRestaurant, userLocation }) {
   const map = useMap()
 
   useEffect(() => {
+    if (
+      isNearMeActive &&
+      Number.isFinite(userLocation?.lat) &&
+      Number.isFinite(userLocation?.lng)
+    ) {
+      map.flyTo([userLocation.lat, userLocation.lng], 13, { duration: 0.9 })
+      return
+    }
+
     if (
       selectedRestaurant?.coordinates?.lat &&
       selectedRestaurant?.coordinates?.lng
@@ -73,7 +103,7 @@ function MapViewport({ selectedRestaurant }) {
     }
 
     map.flyTo(finlandCenter, 5.5, { duration: 0.9 })
-  }, [map, selectedRestaurant])
+  }, [isNearMeActive, map, selectedRestaurant, userLocation])
 
   return null
 }
@@ -81,9 +111,11 @@ function MapViewport({ selectedRestaurant }) {
 function RestaurantMap() {
   const {
     filteredRestaurants,
+    isNearMeActive,
     loading,
     selectedRestaurant,
     setSelectedRestaurantId,
+    userLocation,
   } = useAppData()
 
   const mapRestaurants = useMemo(
@@ -113,7 +145,25 @@ function RestaurantMap() {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
 
-          <MapViewport selectedRestaurant={selectedRestaurant} />
+          <MapViewport
+            isNearMeActive={isNearMeActive}
+            selectedRestaurant={selectedRestaurant}
+            userLocation={userLocation}
+          />
+
+          {Number.isFinite(userLocation?.lat) && Number.isFinite(userLocation?.lng) ? (
+            <Marker
+              position={[userLocation.lat, userLocation.lng]}
+              icon={userLocationPinIcon}
+            >
+              <Popup className="restaurant-popup">
+                <div className="min-w-[150px]">
+                  <h3 className="text-sm font-semibold text-emerald-950">Your Location</h3>
+                  <p className="mt-1 text-xs text-slate-600">Centered from Near Me</p>
+                </div>
+              </Popup>
+            </Marker>
+          ) : null}
 
           {mapRestaurants.map((restaurant) => (
             <Marker
@@ -137,7 +187,9 @@ function RestaurantMap() {
 
           <MapControls
             hasRestaurants={mapRestaurants.length > 0}
+            isNearMeActive={isNearMeActive}
             selectedRestaurant={selectedRestaurant}
+            userLocation={userLocation}
           />
         </MapContainer>
 
