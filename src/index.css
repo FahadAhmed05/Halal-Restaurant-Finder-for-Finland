@@ -350,27 +350,51 @@ input {
   }
 
   .map-card {
-    @apply absolute left-6 top-6 z-20 w-[calc(100%-3rem)] max-w-[340px] rounded-[28px] bg-[rgba(249,247,242,0.92)] p-6 shadow-[0_22px_60px_rgba(35,51,39,0.14)] backdrop-blur;
+    @apply absolute left-6 top-6 z-20 w-[calc(100%-3rem)] max-w-[284px] rounded-[24px] border border-white/45 bg-[rgba(250,248,243,0.9)] px-5 py-4 shadow-[0_18px_42px_rgba(35,51,39,0.16)] backdrop-blur-md;
   }
 
   .map-card-bullet {
     @apply h-2.5 w-2.5 rounded-full bg-emerald-900;
   }
 
+  .map-card-brand {
+    @apply flex h-11 w-11 items-center justify-center rounded-[14px] bg-emerald-900 text-white shadow-[0_12px_24px_rgba(17,72,47,0.24)];
+  }
+
+  .map-card-row {
+    @apply flex items-center gap-2.5;
+  }
+
+  .map-card-row-icon {
+    @apply inline-flex h-5 w-5 flex-shrink-0 items-center justify-center text-emerald-900;
+  }
+
+  .map-card-actions {
+    @apply mt-5 flex items-center gap-2.5;
+  }
+
   .direction-button {
-    @apply mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-emerald-950 px-4 text-sm font-semibold text-white shadow-[0_18px_32px_rgba(20,66,40,0.18)];
+    @apply inline-flex h-11 items-center justify-center gap-2 rounded-[14px] px-4 text-[0.8rem] font-semibold transition;
+  }
+
+  .map-card-action-primary {
+    @apply flex-1 bg-emerald-950 text-white shadow-[0_16px_28px_rgba(20,66,40,0.2)] hover:bg-emerald-900;
+  }
+
+  .map-card-action-secondary {
+    @apply min-w-[96px] border border-emerald-950/10 bg-white/82 text-emerald-950 shadow-[0_12px_24px_rgba(35,51,39,0.08)] hover:bg-white;
   }
 
   .zoom-controls {
-    @apply absolute bottom-16 right-6 z-20 flex w-14 flex-col overflow-hidden rounded-2xl border border-black/5 bg-white/90 shadow-[0_20px_42px_rgba(50,64,52,0.14)];
+    @apply absolute bottom-16 right-6 z-20 flex w-12 flex-col overflow-hidden rounded-[16px] border border-black/5 bg-white/92 shadow-[0_18px_36px_rgba(50,64,52,0.14)];
   }
 
   .zoom-controls button {
-    @apply h-14 text-2xl font-light text-emerald-950 transition hover:bg-emerald-50;
+    @apply h-12 text-[1.7rem] font-light text-emerald-950 transition hover:bg-emerald-50;
   }
 
   .target-control {
-    @apply absolute bottom-6 right-6 z-20 flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-950 text-white shadow-[0_18px_32px_rgba(20,66,40,0.22)];
+    @apply absolute bottom-6 right-6 z-20 flex h-11 w-11 items-center justify-center rounded-[14px] bg-emerald-950 text-white shadow-[0_16px_28px_rgba(20,66,40,0.22)];
   }
 
   .leaflet-map {
@@ -567,7 +591,7 @@ input {
     right: 16px;
     width: auto;
     max-width: none;
-    padding: 20px;
+    padding: 18px 16px;
   }
 
   .detail-content-inner {
