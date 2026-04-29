@@ -95,7 +95,9 @@ function RestaurantCard({
             <TagChip
               key={tag}
               label={tag}
-              className="tag-chip"
+              className={`tag-chip ${
+                tag === restaurant.city ? 'tag-chip-city' : ''
+              }`}
               onClick={(event) => {
                 event.stopPropagation();
                 onSelect?.(restaurant.id);

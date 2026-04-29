@@ -38,7 +38,7 @@ function AppDataProvider({ children }) {
   const { restaurants, loading, error } = useRestaurants()
   const [selectedRestaurantId, setSelectedRestaurantId] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
-  const [searchMode, setSearchMode] = useState('all')
+  const [searchScope, setSearchScope] = useState('all')
   const [selectedCuisine, setSelectedCuisine] = useState('All')
   const [favoriteIds, setFavoriteIds] = useState(() =>
     typeof window === 'undefined' ? [] : readFavoritesFromStorage(),
@@ -50,20 +50,18 @@ function AppDataProvider({ children }) {
     return restaurants.filter((restaurant) => {
       const matchesSearch =
         normalizedQuery.length === 0 ||
-        (searchMode === 'restaurant' &&
-          restaurant.name.toLowerCase().includes(normalizedQuery)) ||
-        (searchMode === 'city' &&
-          restaurant.city.toLowerCase().includes(normalizedQuery)) ||
-        (searchMode === 'all' &&
+        (searchScope === 'all' &&
           (restaurant.name.toLowerCase().includes(normalizedQuery) ||
-            restaurant.city.toLowerCase().includes(normalizedQuery)))
+            restaurant.city.toLowerCase().includes(normalizedQuery))) ||
+        (searchScope === 'cuisine' &&
+          restaurant.cuisine.toLowerCase().includes(normalizedQuery))
 
       const matchesCuisine =
         selectedCuisine === 'All' || restaurant.cuisine === selectedCuisine
 
       return matchesSearch && matchesCuisine
     })
-  }, [restaurants, searchQuery, searchMode, selectedCuisine])
+  }, [restaurants, searchQuery, searchScope, selectedCuisine])
 
   useEffect(() => {
     if (filteredRestaurants.length === 0) {
@@ -120,8 +118,8 @@ function AppDataProvider({ children }) {
     categories: buildCategories(restaurants),
     searchQuery,
     setSearchQuery,
-    searchMode,
-    setSearchMode,
+    searchScope,
+    setSearchScope,
     selectedCuisine,
     setSelectedCuisine,
     selectedRestaurant,

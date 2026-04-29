@@ -4,14 +4,21 @@ import useAppData from '../hooks/useAppData'
 import { Icon, MapPinIcon, SearchIcon } from './icons'
 
 function Header() {
-  const { searchMode, searchQuery, setSearchMode, setSearchQuery } = useAppData()
+  const {
+    categories,
+    searchQuery,
+    searchScope,
+    selectedCuisine,
+    setSearchQuery,
+    setSearchScope,
+    setSelectedCuisine,
+  } =
+    useAppData()
 
   const searchPlaceholder =
-    searchMode === 'city'
-      ? 'Search by city...'
-      : searchMode === 'restaurant'
-        ? 'Search by restaurant name...'
-        : 'Search by name or city...'
+    searchScope === 'cuisine'
+      ? 'Search by cuisine type...'
+      : 'Search by restaurant name or city...'
 
   return (
     <header className="border-b border-black/5 px-6 py-3.5">
@@ -32,14 +39,13 @@ function Header() {
           <div className="header-search-bar">
             <label className="search-inline-mode">
               <select
-                value={searchMode}
-                onChange={(event) => setSearchMode(event.target.value)}
+                value={searchScope}
+                onChange={(event) => setSearchScope(event.target.value)}
                 className="search-inline-select"
                 aria-label="Choose search type"
               >
                 <option value="all">All</option>
-                <option value="restaurant">Restaurant</option>
-                <option value="city">City</option>
+                <option value="cuisine">Cuisine Type</option>
               </select>
             </label>
 
